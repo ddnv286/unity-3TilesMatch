@@ -5,6 +5,6 @@ using UnityEngine;
 public class Tile : MonoBehaviour
 {
     public bool onTopLayer = false;
-
     public Sprite tileSprite;
+    
 }

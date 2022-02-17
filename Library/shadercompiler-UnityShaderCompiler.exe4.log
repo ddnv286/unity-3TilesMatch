@@ -1,4 +1,2 @@
 Base path: 'D:/Program Files/unityVersion/Editor/2019.4.16f1/Editor/Data', plugins path 'D:/Program Files/unityVersion/Editor/2019.4.16f1/Editor/Data/PlaybackEngines'
 Cmd: initializeCompiler
-Cmd: compileSnippet
-  api=4 type=1 insize=1847 outsize=574 kw=ETC1_EXTERNAL_ALPHA pd=UNITY_NO_DXT5nm UNITY_ENABLE_REFLECTION_BUFFERS UNITY_NO_CUBEMAP_ARRAY UNITY_NO_SCREENSPACE_SHADOWS UNITY_PBS_USE_BRDF2 SHADER_API_DESKTOP UNITY_COLORSPACE_GAMMA UNITY_LIGHTMAP_DLDR_ENCODING ok=1
