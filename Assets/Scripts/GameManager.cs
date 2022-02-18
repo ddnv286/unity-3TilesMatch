@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public List<Tile> tileMatchingList;
     public Vector3[] slotPositions = new Vector3[7];
     public int numberOfTiles;
+    public ParticleSystem matchedParticle;
     
     private void Awake()
     {
@@ -101,9 +102,15 @@ public class GameManager : MonoBehaviour
                             // do nothing for now
                         });
                         */
+                        Vector3 particlePosition = tileMatchingList[i - 1].gameObject.transform.position;
                         tileMatchingList[i - 2].gameObject.transform.DOScale(Vector3.zero, 0.5f).SetDelay(1f);
                         tileMatchingList[i - 1].gameObject.transform.DOScale(Vector3.zero, 0.5f).SetDelay(1f);
                         tileMatchingList[i].gameObject.transform.DOScale(Vector3.zero, 0.5f).SetDelay(1f);
+                        DOVirtual.DelayedCall(1.5f, () =>
+                        {
+                            matchedParticle.transform.position = particlePosition;
+                            matchedParticle.Play();
+                        });
                         DestroyImmediate(tileMatchingList[i]);
                         DestroyImmediate(tileMatchingList[i - 1]);
                         DestroyImmediate(tileMatchingList[i - 2]);
