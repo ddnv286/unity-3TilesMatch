@@ -9,14 +9,14 @@ public class GameManager : MonoBehaviour
     public Vector3[] slotPositions = new Vector3[7];
     public int numberOfTiles;
     
-    void Awake()
+    private void Awake()
     {
         InitPositions();
         numberOfTiles = FindObjectsOfType<Tile>().Length;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (MatchArrayIsFull())
         {
@@ -39,12 +39,13 @@ public class GameManager : MonoBehaviour
                     MoveTileToMatchingArea(hit.gameObject.GetComponent<Tile>(), slotPositions[validPos]);
                     numberOfTiles--;
                     tileMatchingList.Insert(validPos, hit.gameObject.GetComponent<Tile>());
+                    CheckMatch(hit.gameObject.GetComponent<Tile>());
                 }
             }
         }
     }
 
-    int ValidPosition (Tile tile)
+    private int ValidPosition (Tile tile)
     {
         int count = 0, tilePos = 0;
         for (int i = 0; i < tileMatchingList.Count; i++)
@@ -73,7 +74,35 @@ public class GameManager : MonoBehaviour
             return false;
     }
 
-    void InitPositions()
+    private void CheckMatch(Tile tile)
+    {
+        if (tileMatchingList.Count >= 3)
+        {
+            string tileName = tile.name;
+            int count = 0;
+            for (int i = 0; i < tileMatchingList.Count; i++)
+            {
+                if (tileMatchingList[i].name.Equals(tileName))
+                {
+                    count++;
+                    if (count == 3)
+                    {
+                        int index = i;
+                        tileMatchingList[index - 2].gameObject.transform.DOScale(Vector3.zero, 0.5f).SetDelay(1f);
+                        tileMatchingList[index - 1].gameObject.transform.DOScale(Vector3.zero, 0.5f).SetDelay(1f);
+                        tileMatchingList[index].gameObject.transform.DOScale(Vector3.zero, 0.5f).SetDelay(1f);
+                        DestroyImmediate(tileMatchingList[index]);
+                        DestroyImmediate(tileMatchingList[index-1]);
+                        DestroyImmediate(tileMatchingList[index-2]);
+                        tileMatchingList.RemoveAll(t => t.name == tile.name);
+                        RearrangeMatchingArrayFrom(index-1);
+                    }
+                }
+            }
+        }
+    }
+
+    private void InitPositions()
     {
         slotPositions[0] = new Vector3(-1.5f, -2.5f);
         slotPositions[1] = new Vector3(-1f, -2.5f);
@@ -84,12 +113,12 @@ public class GameManager : MonoBehaviour
         slotPositions[6] = new Vector3(1.5f, -2.5f);
     }
     
-    void MoveTileToMatchingArea (Tile tile, Vector3 dest)
+    private void MoveTileToMatchingArea (Tile tile, Vector3 dest)
     {
         tile.gameObject.transform.DOMove(dest, 1);
     }
 
-    void RearrangeMatchingArrayFrom(int index)
+    private void RearrangeMatchingArrayFrom(int index)
     {
         if (index == 0)
             return;
