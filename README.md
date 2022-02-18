@@ -28,3 +28,9 @@ https://play.google.com/store/apps/details?id=com.exoticmatch.game
 --Win condition--
 - Tiles in playable area = 0 & number of elements in matching array = 0.
 - Player lost if matching array is full (out of space)
+
+--Processing logic--
+- If there's nothing in matchingArray, return the first position.
+- If the matchingArray isn't empty, find the last index of duplicated elements in the array, then return that index + 1; move any tiles from that index 1 index further
+- If the matchingArray is full or out of space, notify user that they failed that level.
+- If matchingArray has 3 of the same element, remove them from matchingArray and destroy those gameObjects, play matched particle system at the same time.
