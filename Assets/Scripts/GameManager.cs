@@ -5,7 +5,7 @@ using DG.Tweening;
 
 public class GameManager : MonoBehaviour
 {
-    public Tile[] tileMatchingArray = new Tile[7];
+    public List<Tile> tileMatchingList;
     public Vector3[] slotPositions = new Vector3[7];
     public int numberOfTiles;
     
@@ -13,31 +13,64 @@ public class GameManager : MonoBehaviour
     {
         InitPositions();
         numberOfTiles = FindObjectsOfType<Tile>().Length;
-        Debug.Log("Current number of tiles: " + numberOfTiles);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (MatchArrayIsFull())
+        {
+            Debug.Log("Level lost.");
+        } 
+        else if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 touchPosition = new Vector2(worldPoint.x, worldPoint.y);
             Collider2D hit = Physics2D.OverlapPoint(touchPosition);
             if (hit != null)
             {
-                tileMatchingArray[0] = hit.gameObject.GetComponent<Tile>();
-                numberOfTiles--;
-                Debug.Log("Current number of tiles: " + numberOfTiles);
-                Debug.Log(tileMatchingArray[0].gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name);
-                MoveTileToMatchingArray(hit.gameObject.transform, slotPositions[0]);
+                int validPos = ValidPosition(hit.gameObject.GetComponent<Tile>());
+                if (validPos != -1)
+                {
+                    if (validPos < tileMatchingList.Count)
+                    {
+                        RearrangeMatchingArrayFrom(validPos);
+                    }
+                    MoveTileToMatchingArea(hit.gameObject.GetComponent<Tile>(), slotPositions[validPos]);
+                    numberOfTiles--;
+                    tileMatchingList.Insert(validPos, hit.gameObject.GetComponent<Tile>());
+                }
             }
         }
     }
 
     int ValidPosition (Tile tile)
     {
-        return 0;
+        int count = 0, tilePos = 0;
+        for (int i = 0; i < tileMatchingList.Count; i++)
+        {
+            if (tile.name.Equals(tileMatchingList[i].name))
+            {
+                count++;
+                tilePos = i;
+            }
+        }
+        if (count != 0)
+        {
+            return tilePos + 1;
+        }
+        else
+            return tileMatchingList.Count;
+    }
+
+    private bool MatchArrayIsFull ()
+    {
+        if (tileMatchingList.Count == 7)
+        {
+            return true;
+        }
+        else
+            return false;
     }
 
     void InitPositions()
@@ -51,8 +84,18 @@ public class GameManager : MonoBehaviour
         slotPositions[6] = new Vector3(1.5f, -2.5f);
     }
     
-    void MoveTileToMatchingArray (Transform transform, Vector3 dest)
+    void MoveTileToMatchingArea (Tile tile, Vector3 dest)
     {
-        transform.DOMove(dest, 1);
+        tile.gameObject.transform.DOMove(dest, 1);
+    }
+
+    void RearrangeMatchingArrayFrom(int index)
+    {
+        if (index == 0)
+            return;
+        for (int i = tileMatchingList.Count; i > index; i--)
+        {
+            MoveTileToMatchingArea(tileMatchingList[i - 1], slotPositions[i]);
+        }
     }
 }
