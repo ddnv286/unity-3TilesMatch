@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    public bool onTopLayer = false;
-    public Sprite tileSprite;
+    public bool locked = false;
+    public SpriteRenderer maskRenderer;
     public new string name;
 
     private void Awake()
     {
+        if (this.locked)
+        {
+            maskRenderer.GetComponent<SpriteRenderer>().enabled = false;
+        }
         this.name = gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
     }
 }
