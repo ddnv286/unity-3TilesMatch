@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
         if (MatchArrayIsFull())
         {
             Debug.Log("Level lost.");
-        } 
+        }
         else if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour
             Collider2D hit = Physics2D.OverlapPoint(touchPosition);
             if (hit != null)
             {
+                // check if tile under clicked tile is still overlapped
+                CheckTileOverlapped(hit.GetComponent<Tile>());
                 int validPos = ValidPosition(hit.gameObject.GetComponent<Tile>());
                 if (validPos != -1)
                 {
@@ -78,8 +80,20 @@ public class GameManager : MonoBehaviour
     }
 
     private void CheckTileOverlapped(Tile tile) {
-        // nothing for now
-
+        // TODO: check if tile is overlapped
+        BoxCollider2D boxCollider = tile.GetComponent<BoxCollider2D>();
+        Collider2D[] otherColliders = Physics2D.OverlapAreaAll(boxCollider.bounds.min, boxCollider.bounds.max);
+        foreach(var otherCollider in otherColliders) {
+            if (otherCollider.transform.position.z < this.transform.position.z) {
+                otherCollider.gameObject.GetComponent<Tile>().isOverlapped = false;
+            }
+            if (otherCollider.gameObject.GetComponent<Tile>().isOverlapped == false) {
+                otherCollider.gameObject.GetComponent<Tile>().maskRenderer.GetComponent<SpriteRenderer>().enabled = false;
+                Debug.Log("Tile " + otherCollider.gameObject.GetComponent<Tile>().name + " is not overlapped anymore.");
+            } else {
+                Debug.Log("Still overlapped.");
+            }
+        }
     }
 
     private void CheckMatch(Tile tile)

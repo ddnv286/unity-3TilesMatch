@@ -6573,6 +6573,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1961124960}
     m_Modifications:
+    - target: {fileID: -7087401964463280865, guid: 18ff2b203d3a091469d378b898382d55,
+        type: 3}
+      propertyPath: contactFilter.useTriggers
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 637647449821051083, guid: 18ff2b203d3a091469d378b898382d55,
         type: 3}
       propertyPath: m_Sprite
