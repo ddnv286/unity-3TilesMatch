@@ -50,3 +50,9 @@ TagManager:
   - name: Layer3
     uniqueID: 1112734963
     locked: 0
+  - name: Layer4
+    uniqueID: 2579482885
+    locked: 0
+  - name: Layer5
+    uniqueID: 568321567
+    locked: 0

@@ -77,6 +77,11 @@ public class GameManager : MonoBehaviour
             return false;
     }
 
+    private void CheckTileOverlapped(Tile tile) {
+        // nothing for now
+
+    }
+
     private void CheckMatch(Tile tile)
     {
         if (tileMatchingList.Count >= 3)

@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    public bool locked = false;
+    public bool isOverlapped = false;
     public SpriteRenderer maskRenderer;
     public new string name;
+    public ContactFilter2D contactFilter;
 
     private void Awake()
     {
-        if (this.locked)
+        contactFilter.useTriggers = false;
+        if (this.isOverlapped)
         {
-            maskRenderer.GetComponent<SpriteRenderer>().enabled = false;
+            maskRenderer.GetComponent<SpriteRenderer>().enabled = true;
+            GetComponent<BoxCollider2D>().enabled = false;
         }
         this.name = gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.name;
     }
